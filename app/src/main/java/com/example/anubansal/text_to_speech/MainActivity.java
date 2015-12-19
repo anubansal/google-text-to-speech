@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 import java.util.Locale;
 
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private TextToSpeech tts;
     private Button btnSpeak;
     private EditText typeText;
+    private SeekBar seekPitch;
+    private SeekBar seekSpeed;
+    private double pitch = 1.0;
+    private double speed = 1.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 speakOut();
             }
         });
+
+        setSeekPitch();
+
+        setSeekSpeed();
     }
 
     @Override
@@ -95,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private void speakOut() {
         String text = typeText.getText().toString();
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        tts.setSpeechRate((float)speed);
+        tts.setPitch((float)pitch);
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
     @Override
@@ -106,5 +117,47 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
 
         super.onDestroy();
+    }
+
+    private void setSeekPitch() {
+        seekPitch = (SeekBar) findViewById(R.id.seekPitch);
+        seekPitch.setThumbOffset(5);
+        seekPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                pitch = (float) progress / (seekBar.getMax() / 2);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void setSeekSpeed() {
+        seekSpeed = (SeekBar) findViewById(R.id.seekSpeed);
+        seekSpeed.setThumbOffset(5);
+        seekSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                speed = (float) progress / (seekBar.getMax() / 2);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 }

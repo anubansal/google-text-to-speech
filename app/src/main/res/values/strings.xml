@@ -4,4 +4,6 @@
     <string name="text_to_speech">Text to Speech</string>
     <string name="txt_hint">Insert your text</string>
     <string name="btn_text">Speak out</string>
+    <string name="text_pitch">Pitch</string>
+    <string name="text_speed">Speed</string>
 </resources>
