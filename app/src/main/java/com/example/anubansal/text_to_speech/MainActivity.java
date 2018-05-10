@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import java.util.Locale;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -44,11 +45,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         });
 
         tts = new TextToSpeech(this, this);
-
         btnSpeak = (Button) findViewById(R.id.btnSpeak);
-
         typeText = (EditText) findViewById(R.id.type_text);
-
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -88,8 +86,17 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
 
+            Log.d("anubansal92", tts.getAvailableLanguages().toString());
+            Set<Locale> set = tts.getAvailableLanguages();
+            Locale l = null;
+            for (Locale l1 : set) {
+                if (l1.toString().contains("hi")) {
+                    l = l1;
+                }
+            }
 //            to change the language, use tts.setLanguage("lang");
-            int result = tts.setLanguage(Locale.US);
+
+            int result = tts.setLanguage(l);
 
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e(TAG, "This language is not supported");
@@ -104,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private void speakOut() {
         String text = typeText.getText().toString();
-        tts.setSpeechRate((float)speed);
-        tts.setPitch((float)pitch);
+        tts.setSpeechRate((float) speed);
+        tts.setPitch((float) pitch);
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
